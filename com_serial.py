@@ -5,34 +5,38 @@
 # Created by Ahmad Akmal, 22-02-2021, for UGM EMG Research
 import serial
 import pandas as pd
-import datetime as time
+import datetime
+import serial.tools.list_ports
 rawdata = []
 pipi = []
 alis = []
 wkt = []
 count = 0
-header_list = ['Waktu','Pipi',"Alis"]
+header_list = ['Waktu','Pipi']
 p = list(serial.tools.list_ports.comports())
-arduino = serial.Serial(p[0].device,timeout=1,baudrate=9600)
+arduino = serial.Serial(p[0].device,timeout=1,baudrate=74880)
 arduino.flushInput()
 
 while True:
     try:
-        if count == 1000:
-            rawdata.append(str(arduino.readline()))
-            b = rawdata.decode('ISO-8859-1').strip()
-            waktuReal = time.now()
+        if count <= 1000:
+            data = arduino.readline()
+            # rawdata.append(str(arduino.readline()))
+            b = data.decode("ISO-8859-1").strip()
+            waktuReal = datetime.datetime.now()
             waktu = waktuReal.strftime('%H:%M:%S.%f')[:-3]
             c = b.split(',')
             pipi.append(c[0])
-            alis.append(c[1])
+            #alis.append(c[1])
             wkt.append(waktu)
             count+=1
             print(count)
+            if count == 1000:
+                break
     except KeyboardInterrupt:
         print("Keyboard Interrupt")
         break
-    print("Logging Data Selesai")
+print("Logging Data Selesai")
 
 # # def clean(L):
 # #     newL = []
@@ -44,10 +48,11 @@ while True:
 # cleandata = clean(rawdata)
 
 def write():
-    d_t = list(zip(wkt,pipi,alis))
+    d_t = list(zip(wkt,pipi))
     df = pd.DataFrame(d_t, columns=header_list)
     nama_file = input("Masukkan nama file : ")
     df.to_csv('%s.csv'%nama_file,header=header_list,mode='w+')
+    print("Logging data selesai !")
     return df
 write()
 
