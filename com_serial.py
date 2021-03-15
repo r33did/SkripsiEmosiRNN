@@ -7,6 +7,7 @@ import serial
 import pandas as pd
 import datetime
 import serial.tools.list_ports
+import os
 rawdata = []
 pipi = []
 alis = []
@@ -50,10 +51,12 @@ print("Logging Data Selesai")
 # cleandata = clean(rawdata)
 
 def write():
+    root = 'Data_raw'
     d_t = list(zip(wkt,pipi))
     df = pd.DataFrame(d_t, columns=header_list)
     nama_file = input("Masukkan nama file : ")
-    df.to_csv('%s.csv'%nama_file,header=header_list,mode='w+')
+    finaldirs = os.path.join(root,'%s.csv'%nama_file)
+    df.to_csv(finaldirs,header=header_list,mode='w+')
     print("Logging data selesai !")
     return df
 write()

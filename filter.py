@@ -1,9 +1,10 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 import os
 from scipy import signal
 data1n = []
 data2n = []
+root = 'Filtered'
+emosi = ['kaget','marah','santai','senang']
     
 def lowpass_filter(sinyal,fcl):
     sampleRate = 200
@@ -16,34 +17,44 @@ def lowpass_filter(sinyal,fcl):
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-baca = input('Masukkan nama file yang akan difilter : ')
-#dirs = os.listdir(\Kuliah\Tugas Akhir\Source Code\test_git\SkripsiEmosiRNN="Data_training")
-df = pd.read_csv('%s.csv'%baca)
-wk = df["Waktu"]
-pp = df['Pipi']
-#al = df['Alis']
-wkt = list(wk)
-data1 = list(pp)
-#data2 = list(al)
+maindirs = 'Data_raw'
+#baca = input('Masukkan nama file yang akan difilter : ')
+dirs = os.listdir(maindirs)
+for j in emosi:
+    for z in range(2,10):
+        df = pd.read_csv(maindirs+'/'+j+str(z)+'.csv')
+        print(df)
+        print(j+str(z))
+        wk = df["Waktu"]
+        pp = df['Pipi']
+        #al = df['Alis']
+        wkt = list(wk)
+        data1 = list(pp)
+        #data2 = list(al)
 
-t = [i for i in range(len(data1))]
-w = lowpass_filter(data1,2.0)
-#x = lowpass_filter(data2,2.0)
+        t = [i for i in range(len(data1))]
+        w = lowpass_filter(data1,2.0)
+        #x = lowpass_filter(data2,2.0)
 
-mn1 = min(w)
-mx1 = max(w)
-#mn2 = min(x)
-#mx2 = max(x)
+        mn1 = min(w)
+        mx1 = max(w)
+        #mn2 = min(x)
+        #mx2 = max(x)
 
-for i in range(len(w)):
-    data1n.append((w[i]-mn1)/(mx1-mn1))
-    #data2n.append((x[i]-mn1)/(mx1-mn1))
+        for i in range(len(w)):
+            data1n.append((w[i]-mn1)/(mx1-mn1))
+            #data2n.append((x[i]-mn1)/(mx1-mn1))
 
-plt.plot(t,data1n)
-#plt.plot(t,data2n)
-plt.show()
+        #plt.plot(t,data1n)
+        #plt.plot(t,data2n)
+        #plt.show()
 
-#d_t = list(zip(wkt,data1n,data2n))
-d_t = list(zip(wkt,data1n))
-df1 = pd.DataFrame(d_t,columns=['Waktu','Pipi'])
-df1.to_csv('%s_filtered.csv'%baca)
+        #d_t = list(zip(wkt,data1n,data2n))
+        root = 'Data_filter'
+        finaldirs = os.path.join(root,j+str(z)+'_filtered.csv')
+        d_t = list(zip(wkt,data1n))
+        df1 = pd.DataFrame(d_t,columns=['Waktu','Pipi'])
+        df1.to_csv(finaldirs)
+        print('Filter Selesai !')
+        data1n.clear()
+        #data2n.clear()
