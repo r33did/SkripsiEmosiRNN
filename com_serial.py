@@ -30,11 +30,13 @@ while True:
             #alis.append(c[1])
             wkt.append(waktu)
             count+=1
-            print(count)
+            print(b)
             if count == 1000:
+                arduino.close()
                 break
     except KeyboardInterrupt:
         print("Keyboard Interrupt")
+        arduino.close()
         break
 print("Logging Data Selesai")
 
@@ -55,5 +57,6 @@ def write():
     print("Logging data selesai !")
     return df
 write()
+
 
 # ---------------------------EOL--------------------------
