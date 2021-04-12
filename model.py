@@ -40,4 +40,4 @@ def extract_feature(folder='data_test'):
         df1.to_csv(finaldirs)
     print('Selesai !')
 
-extract_feature('Data_filter')
+#extract_feature('Data_filter')
