@@ -16,11 +16,13 @@ def lowpass_filter(sinyal,fcl):
     return fil
 
 def filtering():
+    print("Filter dimulai, harap tunggu sebentar")
     maindirs = 'Data_raw'
-    #baca = input('Masukkan nama file yang akan difilter : ')
     dirs = os.listdir(maindirs)
+    #print(dirs)
+    #print(type(dirs))
     for j in emosi:
-        for z in range(2,10):
+        for z in range(2,int(len(dirs)/4)+2):
             df = pd.read_csv(maindirs+'/'+j+str(z)+'.csv')
             print(df)
             print(j+str(z))
@@ -42,9 +44,9 @@ def filtering():
 
             for i in range(len(w)):
                 data1n.append((w[i]-mn1)/(mx1-mn1))
-                #data2n.append((x[i]-mn1)/(mx1-mn1))
+            #    data2n.append((x[i]-mn1)/(mx1-mn1))
 
-            plt.plot(t,data1n)
+            #plt.plot(t,data1n)
             #plt.plot(t,data2n)
             #plt.show()
 
@@ -56,4 +58,5 @@ def filtering():
             df1.to_csv(finaldirs)
             print('Filter Selesai !')
             data1n.clear()
-            #data2n.clear()
+            data2n.clear()
+filtering()

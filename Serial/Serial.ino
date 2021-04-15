@@ -6,10 +6,9 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-float pipi = analogRead(A0);
-float alis = analogRead(A1);
-//float volt = ((sensorValue/1024)*18000);
-//  Serial.print("otot = ");
-  Serial.println(str(pipi)+','+str(alis);
-//  Serial.println(" mV");
+  float pipi = analogRead(A1);
+  float alis = analogRead(A2);
+  Serial.print(pipi);
+  Serial.print(',');
+  Serial.println(alis);
 }
