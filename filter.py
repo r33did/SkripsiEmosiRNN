@@ -58,5 +58,5 @@ def filtering():
             df1.to_csv(finaldirs)
             print('Filter Selesai !')
             data1n.clear()
-            data2n.clear()
+            # data2n.clear()
 filtering()
