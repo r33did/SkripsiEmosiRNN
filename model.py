@@ -7,6 +7,8 @@ from keras.utils import to_categorical
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import LabelEncoder
 
 data1 = []
 data2 = []
@@ -45,7 +47,15 @@ def extract_feature(folder):
         namafile = i+'_extracted.csv'
         #d_t = list(zip(stdv1,rrt1,md1))
         finaldirs = os.path.join(root,namafile)
-        df1 = pd.DataFrame({'STDEV' : stdv,'AVG' : rrt,'MDN' : md})
+        if(i == 'kaget'):
+            i = 1
+        elif(i == 'marah'):
+            i = 2
+        elif(i == 'santai'):
+            i = 3
+        elif(i == 'senang'):
+            i = 4
+        df1 = pd.DataFrame({'STDEV' : stdv,'AVG' : rrt,'MDN' : md,'EMOSI' : i})
         df1.to_csv(finaldirs,mode='w+')
         print(finaldirs)
         stdv.clear()
@@ -54,9 +64,10 @@ def extract_feature(folder):
     print('Selesai !')
 
 #extract_feature('Data_filter')
+
 def create_model():
     model = keras.Sequential([
-        keras.layers.SimpleRNN(3,input_shape=(1000,3)),
+        keras.layers.SimpleRNN(2,input_shape=(1000,3)),
         keras.layers.BatchNormalization(),
         keras.layers.Dense(4,activation='softmax')
     ])
@@ -74,6 +85,19 @@ def create_model():
     )
     return model
 
+def prepare_inputs(X_train, X_test):
+	ohe = OneHotEncoder()
+	ohe.fit(X_train)
+	X_train_enc = ohe.transform(X_train)
+	X_test_enc = ohe.transform(X_test)
+	return X_train_enc, X_test_enc
+
+def prepare_targets(y_train, y_test):
+	le = LabelEncoder()
+	le.fit(y_train)
+	y_train_enc = le.transform(y_train)
+	y_test_enc = le.transform(y_test)
+	return y_train_enc, y_test_enc
 
 
 # history = model.fit(

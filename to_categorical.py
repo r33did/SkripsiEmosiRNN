@@ -18,7 +18,6 @@ for i in emosi:
     idiot.append(c)
     idiot.append(d)
 
-a = tf.keras.utils.to_categorical([0,1,2,3], num_classes=4)
-a = tf.constant(a, shape=[4, 4])
-b = tf.constant(idiot,shape)
-    #print(a)
+a = tf.keras.utils.to_categorical([0, 1, 2, 3, 9], num_classes=15)
+a = tf.constant(a, shape=[40, 40])
+print(a)
