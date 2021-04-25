@@ -13,7 +13,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 #from com_serial import *
 #from filter import *
-from model import create_model
+from model import *
 rawdata = []
 pipi = []
 alis = []
@@ -48,18 +48,15 @@ le = LabelEncoder()
     #X.append(c)
  #   X.append(b) 
 #X = np.array(X)
-df = pd.read_csv(maindirs+"/"+"tes_only.csv")
+df = pd.read_csv(maindirs+"/"+"tes_extracted.csv")
 X = np.array(df.drop('EMOSI',axis=1))
 y = np.array(df['EMOSI'])
-print(X.shape)
-print("GOTEM")
-print(y.shape)
 X_train, X_test, y_train, y_test = train_test_split(X,y,
                                     test_size=0.33,random_state=42)
-print(X_train)
-print(X_test)
-print(y_train)
-print(y_test)
+print(X_train.shape)
+print(y_train.shape)
+#prepare_inputs(X_train, X_test)
+#prepare_targets(y_train, y_test)
 history = model.fit(
      X_train,
      y_train,
