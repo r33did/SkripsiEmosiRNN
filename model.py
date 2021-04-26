@@ -92,21 +92,18 @@ def extract_feature(folder):
     print('Selesai !')
 
 def create_model():
-    model = keras.Sequential()
-    model.add(keras.layers.Embedding(input_dim=2, output_dim=4,batch_input_shape=[24, None]))
-    model.add(keras.layers.LSTM(8,recurrent_activation='sigmoid',return_sequences=False))
-    model.add(keras.layers.Dense(10))
+    model = keras.models.Sequential()
+    model.add(keras.layers.Dense(8, input_shape=(None,6)))
+    model.add(keras.layers.Dense(4))
+        #keras.layers.Embedding(input_dim=2,output_dim=4, batch_input_shape=[24,None]),
+        #keras.layers.LSTM(4,return_sequences=True,input_shape=[128,24]),
+        #keras.layers.LSTM(4),
+        #keras.layers.Dense(4, activation='softmax',input_shape=[128,24])])
     optimizer = keras.optimizers.Adam(lr=0.01)
     model.compile(
-        loss='binary_crossentropy',
+        loss='categorical_crossentropy',
         optimizer=optimizer,
-        metrics=['binary_accuracy']
-    )
-    model.summary()
-    early_stopping = keras.callbacks.EarlyStopping(
-        patience=10,
-        min_delta=0.001,
-        restore_best_weights=True,
+        metrics=['acc']
     )
     return model
 
@@ -123,7 +120,6 @@ def prepare_targets(y_train, y_test):
 	y_train_enc = le.transform(y_train)
 	y_test_enc = le.transform(y_test)
 	return y_train_enc, y_test_enc
-
 
 # history = model.fit(
 #     train_X,
