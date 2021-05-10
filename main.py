@@ -20,56 +20,48 @@ alis = []
 wkt = []
 count = 0
 header_list = ['Waktu','Pipi','Alis']
+data = []
 X = []
-Y = []
+y = []
 #akuisisi()
 #write()
 #filtering()
 #extract_feature('Data_filter')
 
 model = create_model()
-early_stopping = keras.callbacks.EarlyStopping(
-        patience=10,
-        min_delta=0.001,
-        restore_best_weights=True,
-)
 maindirs = 'Feature_extract'
 dirs = os.listdir(maindirs)
 emosi = ['kaget','marah','santai','senang']
-le = LabelEncoder()
-#y = le.fit_transform(emosi)
-#for i in emosi:
-#    df = pd.read_csv(maindirs+'/'+i+'_extracted.csv')
-#    df.loc['Unnamed'] = 0
-#    b=list(df.iloc[0])
-    #c=list(df.iloc[:,2])
-    #d=list(df.iloc[:,1])
-    #X.append(d)
-    #X.append(c)
- #   X.append(b) 
-#X = np.array(X)
 df = pd.read_csv(maindirs+"/"+"tes_extracted.csv")
+maindirs = 'Feature_extract'
+dirs = os.listdir(maindirs)
+emosi = ['kaget','marah','santai','senang']
+df = pd.read_csv(maindirs+"/"+"tes_extracted4.csv")
 d_t = df.drop('EMOSI',axis=1)
-data = d_t.values.tolist()
-X = keras.preprocessing.sequence.pad_sequences(data, maxlen=None, dtype='float32', padding='pre', truncating='pre', value=0.0)
+label = pd.get_dummies(df['EMOSI'])
+data_len = int(len(d_t))
+for i in range (0,data_len):
+    temp = d_t.iloc[[i]]
+    temp_list = temp.values.tolist()
+    X.append(temp_list)
+for j in range(0,data_len):
+    temp1 = label.iloc[[j]]
+    temp1_list = temp1.values.tolist()
+    y.append(temp1_list)
 X = np.array(X)
-#X = np.array(df.drop('EMOSI',axis=1))
-y = np.array(pd.get_dummies(df['EMOSI']))
-
-X_train, X_test, y_train, y_test = train_test_split(X,y,
-                                    test_size=0.33,random_state=42)
-print(X_train.shape)
-print(y_train.shape)
-print(X)
-#prepare_inputs(X_train, X_test)
-#prepare_targets(y_train, y_test)
+y = np.array(y)
+length = 40
+num_train = 31
+index = np.random.randint(0,length, size=length)
+train_X = X[index[0:num_train]]
+train_Y = y[index[0:num_train]]
+test_X = X[index[num_train:]]
+test_Y = y[index[num_train:]]
 history = model.fit(
-     X_train,
-     y_train,
-     epochs=100,
-     validation_data=(X_test,y_test),
-     callbacks=[early_stopping],
-     # verbose=0
+     train_X,
+     train_Y,
+     epochs=500,
+     validation_data=(test_X,test_Y),
      )
 history_dict = history.history
 loss_values = history_dict['loss']

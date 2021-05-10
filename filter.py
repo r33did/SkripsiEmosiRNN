@@ -16,12 +16,11 @@ def lowpass_filter(sinyal,fcl):
 
 def filtering():
     print("Filter dimulai, harap tunggu sebentar")
-    maindirs = 'Data_raw'
+    maindirs = 'Data_raw2'
     dirs = os.listdir(maindirs)
     for j in emosi:
-        for z in range(2,int(len(dirs)/4)+2):
-            df = pd.read_csv(maindirs+'/'+j+str(z)+'.csv')
-            print(df)
+        for z in range(1,int(len(dirs)/4)+1):
+            df = pd.read_csv(maindirs+'/'+j+str(z)+'_2.csv')
             print(j+str(z))
             wk = df["Waktu"]
             pp = df['Pipi']
@@ -55,10 +54,11 @@ def filtering():
             plt.close(f)
 
             d_t = list(zip(wkt,data1n,data2n))
-            root = 'Data_filter'
+            root = 'Data_filter2'
             finaldirs = os.path.join(root,j+str(z)+'_filtered.csv')
             df1 = pd.DataFrame(d_t,columns=['Waktu','Pipi','Alis'])
             df1.to_csv(finaldirs)
             data1n.clear()
             data2n.clear()
     print('Filter Selesai !')
+

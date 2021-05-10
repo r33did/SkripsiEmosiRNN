@@ -1,8 +1,8 @@
-import keras
 import os
 import numpy as np
 import pandas as pd
 import statistics as st
+import keras
 from keras.utils import to_categorical
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import StratifiedKFold
@@ -33,8 +33,9 @@ def extract_feature(folder):
     count = 0
     root = 'Feature_extract'
     for i in emosi:
-        for j in range(2,int(len(dirs)/4)+2):
+        for j in range(1,int(len(dirs)/4)+1):
             df = pd.read_csv(folder+'/'+i+str(j)+'_filtered.csv')
+            print(folder+'/'+i+str(j)+'_filtered.csv')
             data1 = list(df.iloc[:,2])
             data2 = list(df.iloc[:,3])
             stdv1 = st.stdev(data1)
@@ -61,14 +62,14 @@ def extract_feature(folder):
             elif(i == 'senang'):
                 mk = 4
                 emosi_list.append(mk)
-            
-    namafile = 'tes_extracted.csv'
+            print('Selesai !')
+    namafile = 'tes_extracted2.csv'
     finaldirs = os.path.join(root,namafile)
     df1 = pd.DataFrame({'STDEV1' : stdvn1,'AVG1' : rrtn1,'MDN1' : mdn1,
                         'STDEV2':stdvn2,'AVG2' : rrtn2,'MDN2' : mdn2,'EMOSI' : emosi_list})
     df1.to_csv(finaldirs,mode='w+')
     print(finaldirs)
-        
+    print('Ekstraksi Fitur Selesai !')
         #namafile = i+'_extracted.csv'
         #finaldirs = os.path.join(root,namafile)
         #if(i == 'kaget'):
@@ -89,22 +90,19 @@ def extract_feature(folder):
         #stdvn2.clear()
         #rrtn2.clear()
         #mdn2.clear()
-    print('Selesai !')
 
 def create_model():
-    model = keras.models.Sequential()
-    model.add(keras.layers.Dense(8, input_shape=(None,6)))
-    model.add(keras.layers.Dense(4))
-        #keras.layers.Embedding(input_dim=2,output_dim=4, batch_input_shape=[24,None]),
-        #keras.layers.LSTM(4,return_sequences=True,input_shape=[128,24]),
-        #keras.layers.LSTM(4),
-        #keras.layers.Dense(4, activation='softmax',input_shape=[128,24])])
-    optimizer = keras.optimizers.Adam(lr=0.01)
+    model = keras.models.Sequential([
+            keras.layers.LSTM(4, return_sequences=True, input_shape=(1,4)),
+            keras.layers.LSTM(4, return_sequences=True),
+            keras.layers.Dense(4, activation='softmax')
+            ])
     model.compile(
-        loss='categorical_crossentropy',
-        optimizer=optimizer,
-        metrics=['acc']
+        loss="categorical_crossentropy",
+        optimizer=keras.optimizers.Adam(lr=0.01),
+        metrics=["acc"]
     )
+    model.summary()
     return model
 
 def prepare_inputs(X_train, X_test):

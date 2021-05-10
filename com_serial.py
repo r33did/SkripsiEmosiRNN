@@ -13,10 +13,12 @@ pipi = []
 alis = []
 wkt = []
 count = 0
+d = 0
+e = 0
 header_list = ['Waktu','Pipi','Alis']
 def akuisisi():
     p = list(serial.tools.list_ports.comports())
-    arduino = serial.Serial(p[0].device,baudrate=74880)
+    arduino = serial.Serial(p[0].device,baudrate=115200)
     arduino.flushInput()
     if not arduino.isOpen():
         arduino.open()
@@ -29,6 +31,8 @@ def akuisisi():
                 waktuReal = datetime.datetime.now()
                 waktu = waktuReal.strftime('%H:%M:%S.%f')[:-3]
                 c = b.split(',')
+                d = (int(c[0])/1024)*5
+                e = (int(c[1])/1024)*5
                 pipi.append(c[0])
                 alis.append(c[1])
                 wkt.append(waktu)
