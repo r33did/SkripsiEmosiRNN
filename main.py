@@ -33,10 +33,7 @@ maindirs = 'Feature_extract'
 dirs = os.listdir(maindirs)
 emosi = ['kaget','marah','santai','senang']
 df = pd.read_csv(maindirs+"/"+"tes_extracted.csv")
-maindirs = 'Feature_extract'
-dirs = os.listdir(maindirs)
-emosi = ['kaget','marah','santai','senang']
-df = pd.read_csv(maindirs+"/"+"tes_extracted4.csv")
+#df = pd.read_csv(maindirs+"/"+"tes_extracted4.csv")
 d_t = df.drop('EMOSI',axis=1)
 label = pd.get_dummies(df['EMOSI'])
 data_len = int(len(d_t))
@@ -50,8 +47,10 @@ for j in range(0,data_len):
     y.append(temp1_list)
 X = np.array(X)
 y = np.array(y)
+print(X[0:5])
+print(y[0:5])
 length = 40
-num_train = 31
+num_train = 30
 index = np.random.randint(0,length, size=length)
 train_X = X[index[0:num_train]]
 train_Y = y[index[0:num_train]]
@@ -60,6 +59,7 @@ test_Y = y[index[num_train:]]
 history = model.fit(
      train_X,
      train_Y,
+     batch_size = 10,
      epochs=500,
      validation_data=(test_X,test_Y),
      )

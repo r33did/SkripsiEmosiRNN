@@ -93,8 +93,8 @@ def extract_feature(folder):
 
 def create_model():
     model = keras.models.Sequential([
-            keras.layers.LSTM(4, return_sequences=True, input_shape=(1,4)),
-            keras.layers.LSTM(4, return_sequences=True),
+            keras.layers.LSTM(8, return_sequences=True, input_shape=(1,6)),
+            keras.layers.LSTM(8, return_sequences=True),
             keras.layers.Dense(4, activation='softmax')
             ])
     model.compile(
