@@ -8,7 +8,6 @@ import pandas as pd
 import datetime
 import serial.tools.list_ports
 import os
-rawdata = []
 pipi = []
 alis = []
 wkt = []
@@ -18,7 +17,7 @@ e = 0
 header_list = ['Waktu','Pipi','Alis']
 def akuisisi():
     p = list(serial.tools.list_ports.comports())
-    arduino = serial.Serial(p[0].device,baudrate=115200)
+    arduino = serial.Serial(p[0].device,baudrate=9600)
     arduino.flushInput()
     if not arduino.isOpen():
         arduino.open()
@@ -31,13 +30,14 @@ def akuisisi():
                 waktuReal = datetime.datetime.now()
                 waktu = waktuReal.strftime('%H:%M:%S.%f')[:-3]
                 c = b.split(',')
-                d = (int(c[0])/1024)*5
-                e = (int(c[1])/1024)*5
+                #d = (float(c[0])/1024)*5
+                #e = (float(c[1])/1024)*5
                 pipi.append(c[0])
                 alis.append(c[1])
                 wkt.append(waktu)
+                print(count)
                 count+=1
-                print(b)
+                #print(b)
                 if count == 1000:
                     arduino.close()
                     print("Logging Data Selesai")

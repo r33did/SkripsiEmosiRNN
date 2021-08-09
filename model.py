@@ -93,8 +93,8 @@ def extract_feature(folder):
 
 def create_model():
     model = keras.models.Sequential([
-            keras.layers.LSTM(8, return_sequences=True, input_shape=(1,6)),
-            keras.layers.LSTM(8, return_sequences=True),
+            keras.layers.LSTM(8, return_sequences=True, input_shape=[None,6]),
+            keras.layers.LSTM(8),
             keras.layers.Dense(4, activation='softmax')
             ])
     model.compile(
@@ -105,25 +105,16 @@ def create_model():
     model.summary()
     return model
 
-def prepare_inputs(X_train, X_test):
-	ohe = OneHotEncoder()
-	ohe.fit(X_train)
-	X_train_enc = ohe.transform(X_train)
-	X_test_enc = ohe.transform(X_test)
-	return X_train_enc, X_test_enc
+# def prepare_inputs(X_train, X_test):
+# 	ohe = OneHotEncoder()
+# 	ohe.fit(X_train)
+# 	X_train_enc = ohe.transform(X_train)
+# 	X_test_enc = ohe.transform(X_test)
+# 	return X_train_enc, X_test_enc
 
-def prepare_targets(y_train, y_test):
-	le = LabelEncoder()
-	le.fit(y_train)
-	y_train_enc = le.transform(y_train)
-	y_test_enc = le.transform(y_test)
-	return y_train_enc, y_test_enc
-
-# history = model.fit(
-#     train_X,
-#     train_Y,
-#     epochs=25,
-#     validation_data=(val_X,val_Y),
-#     callbacks=[early_stopping],
-#     # verbose=0
-#     )
+# def prepare_targets(y_train, y_test):
+# 	le = LabelEncoder()
+# 	le.fit(y_train)
+# 	y_train_enc = le.transform(y_train)
+# 	y_test_enc = le.transform(y_test)
+# 	return y_train_enc, y_test_enc

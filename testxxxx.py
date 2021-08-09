@@ -15,22 +15,20 @@ y = []
 maindirs = 'Feature_extract'
 dirs = os.listdir(maindirs)
 emosi = ['kaget','marah','santai','senang']
-df = pd.read_csv(maindirs+"/"+"tes_extracted4.csv")
+df = pd.read_csv(maindirs+"/"+"tes_extracted.csv")
 d_t = df.drop('EMOSI',axis=1)
 label = pd.get_dummies(df['EMOSI'])
+print(label)
 data_len = int(len(d_t))
 for i in range (0,data_len):
-    temp = d_t.iloc[[i]]
+    temp = d_t.loc[i]
     temp_list = temp.values.tolist()
+    print(temp_list)
     X.append(temp_list)
 for j in range(0,data_len):
-    temp1 = label.iloc[[j]]
+    temp1 = label.iloc[j]
+    # print(temp1)
     temp1_list = temp1.values.tolist()
     y.append(temp1_list)
-X = np.array(X)
-y = np.array(y)
-print(X.shape)
 print(X)
-print(y.shape)
-
-
+print(y)
